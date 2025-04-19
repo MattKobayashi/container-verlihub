@@ -1,0 +1,69 @@
+---
+services:
+  verlihub:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      platforms:
+        - linux/amd64
+    container_name: verlihub
+    depends_on:
+      verlihub-mysql:
+        condition: service_healthy
+    environment:
+      - "VH_MYSQL_DB_HOST=verlihub-mysql"
+      - "VH_MYSQL_DB_NAME=verlihub"
+      - "VH_MYSQL_USER=verlihub"
+      - "VH_HUB_CONFIG_DIR=/opt/verlihub/.config/verlihub"
+      - "VH_HUB_HOST=verlihub"
+      - "VH_HUB_PORT=411"
+      - "VH_HUB_NAME=Verlihub Test"
+      - "VH_HUB_MASTER_NAME=MattK"
+    ports:
+      - mode: host
+        protocol: tcp
+        published: 411
+        target: 411
+      - mode: host
+        protocol: udp
+        published: 411
+        target: 411
+    restart: unless-stopped
+    secrets:
+      - VH_MYSQL_PASSWORD
+      - VH_HUB_MASTER_PASSWORD
+    volumes:
+      - source: verlihub-data
+        target: /opt/verlihub/.config/verlihub
+        type: volume
+  verlihub-mysql:
+    container_name: verlihub-mysql
+    environment:
+      - "MYSQL_ROOT_PASSWORD_FILE=/run/secrets/VH_MYSQL_PASSWORD"
+      - "MYSQL_DATABASE=verlihub"
+      - "MYSQL_USER=verlihub"
+      - "MYSQL_PASSWORD_FILE=/run/secrets/VH_MYSQL_PASSWORD"
+    healthcheck:
+      interval: 10s
+      retries: 3
+      start_period: 10s
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      timeout: 5s
+    image: mariadb:11.7.2-ubi9@sha256:997db22450ea775ec7aa64dd2b1921572f7df5fb45e0e88db6b9def5bba1038c
+    restart: unless-stopped
+    secrets:
+      - VH_MYSQL_PASSWORD
+    volumes:
+      - source: verlihub-mysql-data
+        target: /var/lib/mysql
+        type: volume
+secrets:
+  VH_MYSQL_PASSWORD:
+    file: secrets/VH_MYSQL_PASSWORD
+  VH_HUB_MASTER_PASSWORD:
+    file: secrets/VH_HUB_MASTER_PASSWORD
+volumes:
+  verlihub-data:
+    name: verlihub_data
+  verlihub-mysql-data:
+    name: verlihub-mysql_data
