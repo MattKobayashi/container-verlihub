@@ -1,18 +1,7 @@
 ---
-name: Test
-on:
-  pull_request:
-    branches:
-      - main
-    paths:
-      - "**.json"
-      - "**.py"
-      - "**.yaml"
-      - "Dockerfile"
-  workflow_dispatch:
 jobs:
-  container:
-    name: Container
+  image:
+    name: Image
     permissions:
       contents: read
     runs-on: ubuntu-24.04
@@ -40,3 +29,14 @@ jobs:
       - name: Stop and remove container
         run: |
           docker compose down
+name: Test
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "**.json"
+      - "**.py"
+      - "**.yaml"
+      - "Dockerfile"
+  workflow_dispatch:
