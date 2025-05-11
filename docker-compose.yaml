@@ -8,10 +8,10 @@ services:
         - linux/amd64
     container_name: verlihub
     depends_on:
-      verlihub-mysql:
+      verlihub_mysql:
         condition: service_healthy
     environment:
-      - "VH_MYSQL_DB_HOST=verlihub-mysql"
+      - "VH_MYSQL_DB_HOST=verlihub_mysql"
       - "VH_MYSQL_DB_NAME=verlihub"
       - "VH_MYSQL_USER=verlihub"
       - "VH_HUB_CONFIG_DIR=/opt/verlihub/.config/verlihub"
@@ -33,11 +33,11 @@ services:
       - VH_MYSQL_PASSWORD
       - VH_HUB_MASTER_PASSWORD
     volumes:
-      - source: verlihub-data
+      - source: verlihub
         target: /opt/verlihub/.config/verlihub
         type: volume
-  verlihub-mysql:
-    container_name: verlihub-mysql
+  verlihub_mysql:
+    container_name: verlihub_mysql
     environment:
       - "MYSQL_ROOT_PASSWORD_FILE=/run/secrets/VH_MYSQL_PASSWORD"
       - "MYSQL_DATABASE=verlihub"
@@ -54,7 +54,7 @@ services:
     secrets:
       - VH_MYSQL_PASSWORD
     volumes:
-      - source: verlihub-mysql-data
+      - source: verlihub_mysql
         target: /var/lib/mysql
         type: volume
 secrets:
@@ -63,7 +63,7 @@ secrets:
   VH_HUB_MASTER_PASSWORD:
     file: secrets/VH_HUB_MASTER_PASSWORD
 volumes:
-  verlihub-data:
-    name: verlihub_data
-  verlihub-mysql-data:
-    name: verlihub-mysql_data
+  verlihub:
+    name: verlihub
+  verlihub_mysql:
+    name: verlihub_mysql
