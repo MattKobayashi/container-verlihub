@@ -1,5 +1,5 @@
 ARG DEBIAN_FRONTEND=noninteractive
-FROM debian:12.12-slim@sha256:4d9b5b6cf5f643fdf2887eab79f2f916363704184ab270bf4a5c1d65102d03d2 AS build
+FROM debian:12.12-slim@sha256:936abff852736f951dab72d91a1b6337cf04217b2a77a5eaadc7c0f2f1ec1758 AS build
 
 # Install dependencies and compile
 RUN apt-get update \
@@ -31,7 +31,7 @@ RUN git clone --depth 1 --branch 1.5.0.0 https://github.com/Verlihub/verlihub.gi
     && make \
     && make install
 
-FROM debian:12.12-slim@sha256:4d9b5b6cf5f643fdf2887eab79f2f916363704184ab270bf4a5c1d65102d03d2
+FROM debian:12.12-slim@sha256:936abff852736f951dab72d91a1b6337cf04217b2a77a5eaadc7c0f2f1ec1758
 WORKDIR /opt/verlihub/
 
 # Install s6-overlay installation dependencies
