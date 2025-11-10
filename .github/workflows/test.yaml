@@ -34,9 +34,4 @@ on:
   pull_request:
     branches:
       - main
-    paths:
-      - "**.json"
-      - "**.py"
-      - "**.yaml"
-      - "Dockerfile"
   workflow_dispatch:
