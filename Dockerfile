@@ -24,7 +24,7 @@ RUN apt-get update \
 #     && CFLAGS="-fPIC" CXXFLAGS="-fPIC" ./runConfigureICU Linux --enable-shared \
 #     && make \
 #     && make install
-RUN git clone --depth 1 --branch 1.5.0.0 https://github.com/Verlihub/verlihub.git \
+RUN git clone --depth 1 --branch 1.6.0.0 https://github.com/Verlihub/verlihub.git \
     && mkdir -p verlihub/build \
     && cd verlihub/build \
     && cmake -DWITH_PLUGINS=OFF .. \
