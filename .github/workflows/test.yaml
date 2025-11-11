@@ -31,6 +31,10 @@ jobs:
         run: |
           sleep 10
           docker compose logs verlihub
+      # Attempt TCP connection
+      - name: Attempt TCP connection
+        run: |
+          nc -zv 127.0.0.1 411
       # Stop and remove containers
       - name: Stop and remove container
         run: |
