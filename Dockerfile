@@ -19,12 +19,18 @@ RUN apt-get update \
     mariadb-client \
     python3 \
     libmariadb-dev-compat
+
+# icu
 # RUN git clone --depth 1 --branch release-72-1 https://github.com/unicode-org/icu.git \
 #     && cd icu/icu4c/source \
 #     && CFLAGS="-fPIC" CXXFLAGS="-fPIC" ./runConfigureICU Linux --enable-shared \
 #     && make \
 #     && make install
-RUN git clone --depth 1 --branch 1.6.0.0 https://github.com/Verlihub/verlihub.git \
+
+# Verlihub
+# renovate: datasource=github-releases packageName=Verlihub/verlihub
+ARG VERLIHUB_VERSION="1.6.0.0"
+RUN git clone --depth 1 --branch ${VERLIHUB_VERSION} https://github.com/Verlihub/verlihub.git \
     && mkdir -p verlihub/build \
     && cd verlihub/build \
     && cmake -DWITH_PLUGINS=OFF .. \
