@@ -93,7 +93,6 @@ COPY --from=build /usr/local/share/locale/it_IT/LC_MESSAGES/verlihub.mo /usr/loc
 COPY --from=build /usr/local/share/locale/nl_NL/LC_MESSAGES/verlihub.mo /usr/local/share/locale/nl_NL/LC_MESSAGES/verlihub.mo
 COPY --from=build /usr/local/share/locale/sv_SE/LC_MESSAGES/verlihub.mo /usr/local/share/locale/sv_SE/LC_MESSAGES/verlihub.mo
 COPY --from=build /usr/local/share/locale/tr_TR/LC_MESSAGES/verlihub.mo /usr/local/share/locale/tr_TR/LC_MESSAGES/verlihub.mo
-COPY --from=build /usr/local/share/locale/lt_LT/LC_MESSAGES/verlihub.mo /usr/local/share/locale/lt_LT/LC_MESSAGES/verlihub.mo
 COPY --from=build /usr/local/share/locale/zh_CN/LC_MESSAGES/verlihub.mo /usr/local/share/locale/zh_CN/LC_MESSAGES/verlihub.mo
 COPY --from=build /usr/local/share/man/man1/verlihub.1 /usr/local/share/man/man1/verlihub.1
 COPY --from=build /usr/local/share/man/man1/vh.1 /usr/local/share/man/man1/vh.1
