@@ -38,16 +38,17 @@ WORKDIR /opt/verlihub/
 RUN apt-get update \
     && apt-get --no-install-recommends --yes install \
     xz-utils
-
-# Add s6-overlay
 WORKDIR /tmp/
-ENV S6_OVERLAY_VERSION=3.2.1.0
-ADD https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-noarch.tar.xz /tmp
-ADD https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-noarch.tar.xz.sha256 /tmp
+
+# s6-overlay
+# renovate: datasource=github-releases packageName=just-containers/s6-overlay
+ARG S6_OVERLAY_VERSION="v3.2.1.0"
+ADD https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION}/s6-overlay-noarch.tar.xz /tmp
+ADD https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION}/s6-overlay-noarch.tar.xz.sha256 /tmp
 RUN echo "$(cat s6-overlay-noarch.tar.xz.sha256)" | sha256sum -c - \
     && tar -C / -Jxpf /tmp/s6-overlay-noarch.tar.xz
-ADD https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-x86_64.tar.xz /tmp
-ADD https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-x86_64.tar.xz.sha256 /tmp
+ADD https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION}/s6-overlay-x86_64.tar.xz /tmp
+ADD https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION}/s6-overlay-x86_64.tar.xz.sha256 /tmp
 RUN echo "$(cat s6-overlay-x86_64.tar.xz.sha256)" | sha256sum -c - \
     && tar -C / -Jxpf /tmp/s6-overlay-x86_64.tar.xz
 COPY s6-rc.d/ /etc/s6-overlay/s6-rc.d/
