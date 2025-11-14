@@ -1,5 +1,5 @@
 ARG DEBIAN_FRONTEND=noninteractive
-FROM debian:12.12-slim@sha256:936abff852736f951dab72d91a1b6337cf04217b2a77a5eaadc7c0f2f1ec1758 AS build
+FROM debian:12.12-slim@sha256:936abff852736f951dab72d91a1b6337cf04217b2a77a5eaadc7c0f2f1ec1758 AS builder
 
 # Install dependencies and compile
 RUN apt-get update \
@@ -30,12 +30,13 @@ RUN apt-get update \
 # Verlihub
 # renovate: datasource=github-releases packageName=Verlihub/verlihub
 ARG VERLIHUB_VERSION="1.6.0.0"
-RUN git clone --depth 1 --branch ${VERLIHUB_VERSION} https://github.com/Verlihub/verlihub.git \
+RUN mkdir -p /tmp/verlihub \
+    && git clone --depth 1 --branch ${VERLIHUB_VERSION} https://github.com/Verlihub/verlihub.git \
     && mkdir -p verlihub/build \
     && cd verlihub/build \
     && cmake -DWITH_PLUGINS=OFF .. \
     && make \
-    && make install
+    && make install DESTDIR=/tmp/verlihub
 
 FROM debian:12.12-slim@sha256:936abff852736f951dab72d91a1b6337cf04217b2a77a5eaadc7c0f2f1ec1758
 WORKDIR /opt/verlihub/
@@ -73,38 +74,7 @@ RUN apt-get --no-install-recommends --yes install \
     && chown -R verlihub:verlihub /opt/verlihub/
 
 # Copy files from build image
-COPY --from=build /usr/local/lib/libvhapi.so /usr/local/lib/libvhapi.so
-COPY --from=build /usr/local/lib/libverlihub.so /usr/local/lib/libverlihub.so
-COPY --from=build /usr/local/bin/verlihub /usr/local/bin/verlihub
-COPY --from=build /usr/local/bin/verlihub_config /usr/local/bin/verlihub_config
-COPY --from=build /usr/local/include/verlihub/ /usr/local/include/verlihub/
-COPY --from=build /usr/local/share/verlihub/ /usr/local/share/verlihub/
-COPY --from=build /usr/local/bin/vh_daemon /usr/local/bin/vh_daemon
-COPY --from=build /usr/local/bin/vh_lib /usr/local/bin/vh_lib
-COPY --from=build /usr/local/bin/vh_gui /usr/local/bin/vh_gui
-COPY --from=build /usr/local/bin/vh /usr/local/bin/vh
-COPY --from=build /usr/local/bin/vhm /usr/local/bin/vhm
-COPY --from=build /usr/local/bin/vh_regimporter /usr/local/bin/vh_regimporter
-COPY --from=build /usr/local/bin/vh_migration_0.9.8eto1.0 /usr/local/bin/vh_migration_0.9.8eto1.0
-COPY --from=build /usr/local/share/locale/cs_CZ/LC_MESSAGES/verlihub.mo /usr/local/share/locale/cs_CZ/LC_MESSAGES/verlihub.mo
-COPY --from=build /usr/local/share/locale/hu_HU/LC_MESSAGES/verlihub.mo /usr/local/share/locale/hu_HU/LC_MESSAGES/verlihub.mo
-COPY --from=build /usr/local/share/locale/pl_PL/LC_MESSAGES/verlihub.mo /usr/local/share/locale/pl_PL/LC_MESSAGES/verlihub.mo
-COPY --from=build /usr/local/share/locale/ro_RO/LC_MESSAGES/verlihub.mo /usr/local/share/locale/ro_RO/LC_MESSAGES/verlihub.mo
-COPY --from=build /usr/local/share/locale/sk_SK/LC_MESSAGES/verlihub.mo /usr/local/share/locale/sk_SK/LC_MESSAGES/verlihub.mo
-COPY --from=build /usr/local/share/locale/bg_BG/LC_MESSAGES/verlihub.mo /usr/local/share/locale/bg_BG/LC_MESSAGES/verlihub.mo
-COPY --from=build /usr/local/share/locale/ru_RU/LC_MESSAGES/verlihub.mo /usr/local/share/locale/ru_RU/LC_MESSAGES/verlihub.mo
-COPY --from=build /usr/local/share/locale/de_DE/LC_MESSAGES/verlihub.mo /usr/local/share/locale/de_DE/LC_MESSAGES/verlihub.mo
-COPY --from=build /usr/local/share/locale/es_ES/LC_MESSAGES/verlihub.mo /usr/local/share/locale/es_ES/LC_MESSAGES/verlihub.mo
-COPY --from=build /usr/local/share/locale/fr_FR/LC_MESSAGES/verlihub.mo /usr/local/share/locale/fr_FR/LC_MESSAGES/verlihub.mo
-COPY --from=build /usr/local/share/locale/it_IT/LC_MESSAGES/verlihub.mo /usr/local/share/locale/it_IT/LC_MESSAGES/verlihub.mo
-COPY --from=build /usr/local/share/locale/nl_NL/LC_MESSAGES/verlihub.mo /usr/local/share/locale/nl_NL/LC_MESSAGES/verlihub.mo
-COPY --from=build /usr/local/share/locale/sv_SE/LC_MESSAGES/verlihub.mo /usr/local/share/locale/sv_SE/LC_MESSAGES/verlihub.mo
-COPY --from=build /usr/local/share/locale/tr_TR/LC_MESSAGES/verlihub.mo /usr/local/share/locale/tr_TR/LC_MESSAGES/verlihub.mo
-COPY --from=build /usr/local/share/locale/zh_CN/LC_MESSAGES/verlihub.mo /usr/local/share/locale/zh_CN/LC_MESSAGES/verlihub.mo
-COPY --from=build /usr/local/share/man/man1/verlihub.1 /usr/local/share/man/man1/verlihub.1
-COPY --from=build /usr/local/share/man/man1/vh.1 /usr/local/share/man/man1/vh.1
-COPY --from=build /usr/local/share/man/man1/vh_regimporter.1 /usr/local/share/man/man1/vh_regimporter.1
-COPY --from=build /usr/local/share/man/man1/vhm.1 /usr/local/share/man/man1/vhm.1
+COPY --from=builder /tmp/verlihub/ /
 
 # Run ldconfig
 RUN ldconfig
