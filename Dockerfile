@@ -28,7 +28,7 @@ RUN apt-get update \
 #     && make install
 
 # Verlihub
-# renovate: datasource=github-releases packageName=Verlihub/verlihub
+# renovate: datasource=github-releases packageName=Verlihub/verlihub versioning=loose
 ARG VERLIHUB_VERSION="1.6.0.0"
 RUN mkdir -p /tmp/verlihub \
     && git clone --depth 1 --branch ${VERLIHUB_VERSION} https://github.com/Verlihub/verlihub.git \
@@ -48,7 +48,7 @@ RUN apt-get update \
 WORKDIR /tmp/
 
 # s6-overlay
-# renovate: datasource=github-releases packageName=just-containers/s6-overlay
+# renovate: datasource=github-releases packageName=just-containers/s6-overlay versioning=loose
 ARG S6_OVERLAY_VERSION="v3.2.1.0"
 ADD https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION}/s6-overlay-noarch.tar.xz /tmp
 ADD https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION}/s6-overlay-noarch.tar.xz.sha256 /tmp
