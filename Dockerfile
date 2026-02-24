@@ -1,5 +1,5 @@
 ARG DEBIAN_FRONTEND=noninteractive
-FROM debian:12.13-slim@sha256:98f4b71de414932439ac6ac690d7060df1f27161073c5036a7553723881bffbe AS builder
+FROM debian:12.13-slim@sha256:74d56e3931e0d5a1dd51f8c8a2466d21de84a271cd3b5a733b803aa91abf4421 AS builder
 
 # Install dependencies and compile
 RUN apt-get update \
@@ -38,7 +38,7 @@ RUN mkdir -p /tmp/verlihub \
     && make \
     && make install DESTDIR=/tmp/verlihub
 
-FROM debian:12.13-slim@sha256:98f4b71de414932439ac6ac690d7060df1f27161073c5036a7553723881bffbe
+FROM debian:12.13-slim@sha256:74d56e3931e0d5a1dd51f8c8a2466d21de84a271cd3b5a733b803aa91abf4421
 WORKDIR /opt/verlihub/
 
 # Install s6-overlay installation dependencies
