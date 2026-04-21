@@ -49,7 +49,7 @@ services:
       start_period: 10s
       test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
       timeout: 5s
-    image: mariadb:11.8.6-ubi9@sha256:1bafd7737d5e82b5c030149cb6e8c03eb14562f69e3ed6c50f8778985bf4aafa
+    image: mariadb:11.8.6-ubi9@sha256:8d55bc4cfd098574d747f62a7cdcac907cfe607e764ae62b1e9635e53bd098cb
     restart: unless-stopped
     secrets:
       - VH_MYSQL_PASSWORD
